@@ -4,11 +4,11 @@ body {
 
 td {
   padding: 6px;
-  border-bottom: 6px solid gray;
+  border-bottom: 1px solid gray;
 }
 
 th {
-  background-color: rgb(183, 208, 255);
+  background-color: #b7d0ff;
   font-weight: bold;
   padding: 12px 0px 12px 6px;
   border-bottom: 2px solid gray;
@@ -26,6 +26,10 @@ table {
   margin: auto;
   padding: 60px;
   width: 60%;
+}
+
+h1 {
+  text-align: center;
 }
 
 tr:nth-child(n) {
