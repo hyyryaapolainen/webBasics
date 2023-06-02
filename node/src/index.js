@@ -1,61 +1,71 @@
-import "./styles.css";
+//import "./styles.css";
 
-async function getUsers() {
-    const munDataUrl = "https://statfin.stat.fi/PxWeb/sq/4e244893-7761-4c4f-8e55-7a8d41d86eff"
-    const munPromise= await fetch(munDataUrl)
-    const munJSON = await munPromise.json()
+const geoDataURL = "https://geo.stat.fi/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=tilastointialueet:kunta4500k&outputFormat=json&srsName=EPSG:4326";
 
-    const empDataUrl= "https://statfin.stat.fi/PxWeb/sq/5e288b40-f8c8-4f1e-b3b0-61b86ce5c065"
-    const empPromise = await fetch(empDataUrl);
-    const empJSON = await empPromise.json();
+const posMigrationURL = "https://statfin.stat.fi/PxWeb/sq/4bb2c735-1dc3-4c5e-bde7-2165df85e65f"
 
+const negMigrationURL = "https://statfin.stat.fi/PxWeb/sq/944493ca-ea4d-4fd9-a75c-4975192f7b6e"
 
-    console.log(empJSON);
+let posMigData = null;
+let negMigData = null
 
-    const popData = munJSON.dataset.value;
-    const dataTable = document.getElementById("data-table");
-    const munData = munJSON.dataset.dimension.Alue.category.label
-    const indexData = munJSON.dataset.dimension.Alue.category.index
+async function setUpDocument() {
+    var geoDataPromise = await fetch(geoDataURL)
+    var geoData = await geoDataPromise.json()
 
-    const empData = empJSON.dataset.value;
+    const posMigPromise = await fetch(posMigrationURL)
+    posMigData = await posMigPromise.json()
 
+    const negMigPromise = await fetch(negMigrationURL)
+    negMigData = await negMigPromise.json()
 
-    for(const key in munData)
-    {
-        let tr = document.createElement("tr")
-        let td1 = document.createElement("td")
-        let td2 = document.createElement("td")
-        let td3 = document.createElement("td")
-        let td4 = document.createElement("td")
-        td1.innerText = munData[key]
-        td2.innerText = popData[indexData[key]]
-        td3.innerText = empData[indexData[key]]
-        let empPercent = ((empData[indexData[key]]/popData[indexData[key]])*100).toFixed(2)
-        td4.innerText = empPercent
-        if(empPercent > 45.0)
-        {
-            tr.style.backgroundColor = "#abffbd";
-        }
-        else if(empPercent < 25)
-        {
-            tr.style.backgroundColor = "#ff9e9e";
-        }
-        tr.appendChild(td1)
-        tr.appendChild(td2)
-        tr.appendChild(td3)
-        tr.appendChild(td4)
-
-        dataTable.appendChild(tr)
-    }
-    
+    var map = L.map('map', {
+      minZoom: -3,
+      weight: 2
+    }).setView([64.92411, 25.748151],5);
+    L.geoJSON(geoData, {
+      style: mapstyle,
+      onEachFeature: onEachFeature
+    }).addTo(map);
 }
 
+
 if (document.readyState !== "loading") {
-    console.log("Document is ready!");
-    getUsers();
-  } else {
-    document.addEventListener("DOMContentLoaded", function () {
-      console.log("Document is ready after waiting!");
-      getUsers();
-    });
-  }
+  console.log("Document is ready!");
+  setUpDocument();
+} else {
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("Document is ready after waiting!");
+    setUpDocument();
+  });
+}
+function onEachFeature(feature, layer)
+{
+  var key = feature.properties.kunta
+  var posIndex = posMigData.dataset.dimension.Tuloalue.category.index["KU"+key]
+  var negIndex = negMigData.dataset.dimension.Lähtöalue.category.index["KU"+key]
+  var posValue = posMigData.dataset.value[posIndex]
+  var negValue = negMigData.dataset.value[negIndex]
+  console.log(posValue)
+  console.log(negValue)
+  var totalMigration = posValue - negValue
+  console.log(totalMigration)
+
+
+  layer.bindTooltip(feature.properties.name)
+  
+  layer.bindPopup(
+    `<ul>
+        <li>Positive migration: ${posValue}</li>
+        <li>Negative migration: ${negValue}</li>
+    </ul>`)
+  
+}
+function mapstyle(feature) {
+  return{
+		fillColor:"#fff",
+	        color:"#000",
+	        weight:'1',
+	        fillOpacity:1
+	};
+    }
