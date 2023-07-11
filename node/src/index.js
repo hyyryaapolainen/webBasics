@@ -1,4 +1,4 @@
-//import "./styles.css";
+import "./styles.css";
 
 const geoDataURL = "https://geo.stat.fi/geoserver/wfs?service=WFS&version=2.0.0&request=GetFeature&typeName=tilastointialueet:kunta4500k&outputFormat=json&srsName=EPSG:4326";
 
@@ -21,11 +21,18 @@ async function setUpDocument() {
 
     var map = L.map('map', {
       minZoom: -3,
-      weight: 2
-    }).setView([64.92411, 25.748151],5);
-    L.geoJSON(geoData, {
+    })
+    
+    var geoJSON = L.geoJSON(geoData, {
       style: mapstyle,
-      onEachFeature: onEachFeature
+      onEachFeature: onEachFeature,
+      weight: 2
+    }).addTo(map);
+
+    map.fitBounds(geoJSON.getBounds())
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 }
 
@@ -46,11 +53,7 @@ function onEachFeature(feature, layer)
   var negIndex = negMigData.dataset.dimension.Lähtöalue.category.index["KU"+key]
   var posValue = posMigData.dataset.value[posIndex]
   var negValue = negMigData.dataset.value[negIndex]
-  console.log(posValue)
-  console.log(negValue)
   var totalMigration = posValue - negValue
-  console.log(totalMigration)
-
 
   layer.bindTooltip(feature.properties.name)
   
@@ -62,10 +65,23 @@ function onEachFeature(feature, layer)
   
 }
 function mapstyle(feature) {
+
+  var key = feature.properties.kunta
+  var posIndex = posMigData.dataset.dimension.Tuloalue.category.index["KU"+key]
+  var negIndex = negMigData.dataset.dimension.Lähtöalue.category.index["KU"+key]
+  var posValue = posMigData.dataset.value[posIndex]
+  var negValue = negMigData.dataset.value[negIndex]
+  var totalMigration = posValue - negValue
+  var hue = Math.pow((posValue/negValue), 3) * 60;
+  
   return{
-		fillColor:"#fff",
-	        color:"#000",
-	        weight:'1',
-	        fillOpacity:1
-	};
-    }
+    fillColor: calculateColor(hue),
+          color: "green",
+          weight:'1',
+          fillOpacity:1
+  };
+}
+function calculateColor(hue) {
+
+    return `hsl(${hue}, 75%, 50%)`
+}
