@@ -19,23 +19,23 @@ Then I moved on to adding categories based on the current samples from the lectu
 
 I expanded the drag and drop functionality to multiple things inside the page such as the toolbar. I thought having the top navbar and toolkit follow the editor gave it more fluidity, as the user wouldn't need to scroll back up top to add samples or create new tracks. Also gave me a good understanding of different positioning options with CSS. I wanted to explore adding freeform samples to the track container so that it would give the user more control on when to play the sounds to create a better user experience. As it stands now, the music maker can only be used to play sounds one after the other.
 
-I worked entirely on a fullscreen application before moving onto mobile views, which turned out to not work out that well. Although I used relative sizes and planned out the application, fitting everything inside the mobile screen as well as the control panel turned out to be more difficult than I anticipated. I also tried to comment everything out and laid out a roadmap using the features given in the project instructions to make a more clear plan on where the application was headed.
+I worked entirely on a fullscreen application before moving onto mobile views, which turned out to not work out that well. Although I used relative sizes and planned out the application, fitting everything inside the mobile screen as well as the control panel turned out to be more difficult than I anticipated. I also tried to comment everything out and laid out a roadmap using the features given in the project instructions to make a more clear plan on where the application was headed. Unfortunately due to having work and other courses I had no time to implement a couple of features that I would've liked such as adding custom steps between samples, drag and dropping to reposition samples inside tracks and adding more options to the track controls such as oscillator nodes.
 
 
 ## Features and requirements
 
 ### Requirements
 
-| Requirement | Max Points | Status | Description |
+| Requirement | Max Points | Done | Description |
 |--|--|--|--|
-| Well-written report | 2 | | The application includes a well-written report providing clear documentation and explanation of its features |
-| No report | -30 | | If no report is provided, a penalty of -30 points will be applied|
+| Well-written report | 2 | YES | The application includes a well-written report providing clear documentation and explanation of its features |
+| No report | -30 | NO | If no report is provided, a penalty of -30 points will be applied|
 |Application is responsive and can be used on both desktop and mobile environment | 4 | |The application is designed to be responsive, allowing it to function well on both desktop and mobile devices |
-| Application is not responsive | -2 | | If the application is not responsive, a penalty of -2 points will be applied |
-| Application works on Firefox, Safari, Edge, and Chrome | 2 | | The application is tested and verified to work on Firefox, Safari, Edge, and Chrome browsers |
-| Application does not work | -30 | | If the application is not functioning, a penalty of -30 points will be applied |
-| CSS, JavaScript, and HTML are all in the same file | -5 | | If CSS, JavaScript, and HTML are combined in a single file, a penalty of -5 points will be applied |
-| Inappropriate content, including hate speech-related memes and other trash | -100 | | If the application contains inappropriate content, including hate speech-related memes or other offensive material, a penalty of -100 points will be applied |
+| Application is not responsive | -2 | NO | If the application is not responsive, a penalty of -2 points will be applied |
+| Application works on Firefox, Safari, Edge, and Chrome | 2 | NOT SURE | The application is tested and verified to work on Firefox, Safari, Edge, and Chrome browsers |
+| Application does not work | -30 | WORKS | If the application is not functioning, a penalty of -30 points will be applied |
+| CSS, JavaScript, and HTML are all in the same file | -5 | SEPARATED | If CSS, JavaScript, and HTML are combined in a single file, a penalty of -5 points will be applied |
+| Inappropriate content, including hate speech-related memes and other trash | -100 | NOPE | If the application contains inappropriate content, including hate speech-related memes or other offensive material, a penalty of -100 points will be applied |
 
 ### Features specified in instructions
 
@@ -50,8 +50,8 @@ I worked entirely on a fullscreen application before moving onto mobile views, w
 | Looping and one-time tracks | 1 | YES | Tracks can be set to loop or play only once |
 | Recording songs through microphone | 3 | YES | Users can record songs using the web audio API and the microphone |
 | User can delete tracks and instrument items | 3 | YES | Users have the ability to remove tracks and individual instrument items from the composition if needed |
-| Adjustable volume per instrument item | 1 | | Each instrument item within a track can have its own adjustable volume level |
-| One can change the category of an instrument | 1 | | Users can change the category of an instrument, allowing it to be moved to a different category or group |
+| Adjustable volume per instrument item | 1 | NO | Each instrument item within a track can have its own adjustable volume level |
+| One can change the category of an instrument | 1 | YES | Users can change the category of an instrument, allowing it to be moved to a different category or group |
 | Able to download the final song | 3 | | Users have the option to download the final composition as a song file, allowing them to save and share it |
 
 ### Added features

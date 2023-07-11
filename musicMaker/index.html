@@ -38,10 +38,10 @@
           <div class="control-panel-content">
             <div class="sample-controls">
               <div class="file-input">
+                <!--Hide default file input text + button, replace with a custom button-->
               <input type="file" style="display:none;" id="input-sample" name="input-sample" accept="audio/*">
               <input type="button" value="Valitse tiedosto" onclick="document.getElementById('input-sample').click();" />
               <input style="text-align: center" type="text" id="input-sample-name" placeholder="Sample name" name="sample-name">
-              
               <button id="upload">Add new sample</button>
               <div class="record-container">
                 <button id="record-button">Record</button>

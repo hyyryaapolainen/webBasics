@@ -814,7 +814,10 @@ function playTrack(track) {
                     audio.play()
                     i++
                 }, stepBetweenSamples)
-            }         
+            }
+            else{
+                track.playing = false;
+            }        
         })
     audio.play()
     track.playing = true
