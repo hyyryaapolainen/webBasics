@@ -1,0 +1,290 @@
+$container-width: 100px
+
+body
+  font-family: Roboto, sans-serif
+  margin: 0
+  padding: 0px
+
+.sample-menu
+  margin: 1em
+  display: flex
+  flex-direction: row
+  flex-wrap: wrap
+  justify-content: center
+  overflow-y: auto
+  :not(:first-child)
+    margin-left: 0.25em
+  .draggable-button
+    word-wrap: break-word
+    width: fit-content
+    height: fit-content
+    padding: 0.5em
+    border-radius: 10px
+    cursor: pointer
+
+    margin-top: 0.25em
+
+.track-name-label
+  margin-top: 1em
+
+input[type=radio]
+  display: none
+
+input[type=checkbox]
+  display: none
+
+.single-radio-button
+  input:checked + label 
+    border: solid 2px green
+    color: #F00
+    &:hover
+      border: solid 2px green
+      color: #F00
+
+.loopCheck:checked + label 
+    border: solid 1px green
+    color: green
+
+.loopCheckContainer
+  margin: 0.5em
+.loopCheckLabel
+  margin-top: 3em
+  position: relative
+  z-index: 18
+  cursor: pointer
+
+.track-container
+  height: 100%
+  display: flex
+  flex-direction: column
+  margin: 1em
+
+
+.track-name-label
+  text-align: left
+  display: flex
+  .track-name-input
+    height: 2em
+    text-align: center
+.single-track
+  min-height: 100%
+  margin: 1em 1em 0 0
+  flex-wrap: nowrap
+  min-width: 80%
+  width: fit-content
+  position: relative
+  display: flex
+.track-info
+  position: relative
+  height: 100%
+  margin: 1em 1em 0 0
+  padding: 1em
+  width: 10%
+  display: flex
+  flex-direction: column
+  flex-grow: 0
+  h1
+    font-size: 1.5rem
+
+.drag-over
+  border: 1px dotted black
+
+.track-samples
+  width: fit-content
+  position: relative
+  display: flex
+  min-width: 100%
+  padding: 0 5px 0 5px
+  .drag-drop-container
+    position: absolute
+    top: 0
+    left: 0
+    width: 100%
+    height: 100%    
+    flex-grow: 1
+
+  .sample-container
+    transition: width 0.5s
+    flex-shrink: 0
+    height: 100%
+    border: 1px solid black
+    border-radius: 10px
+    display: flex
+    flex-direction: column
+    min-width: 40px
+    #sample-area
+      height: 100%
+    p
+      display: inline-block
+  .sample-container:last-child
+    margin-right: 0px
+
+.control-panel
+  min-width: fit-content
+  z-index: 20
+  display: flex
+  width: 40%
+  justify-content: center
+  align-items: center
+  position: absolute
+  border-radius: 10px
+  top: 50%
+  left: 30%
+  transition: background-color 0.5s ease-in
+  div
+    flex-direction: column
+    width: 100%
+    .control-panel-header
+      flex-direction: row
+      display: flex
+      width: 100%
+      cursor: pointer
+      z-index: 21
+      align-items: top
+      h2
+        margin: 0
+        height: 100%
+        border: 1px solid black
+        background-color: white
+        width: 100%
+
+span.separator 
+    border-top: 1px solid #333
+    width: 80%
+    margin: auto
+    height: 1px
+    display: block
+.minimize
+  font-size: 1em
+  text-align: left
+.track-options
+  margin-bottom: 1em
+
+#category-selection
+  margin: 1em
+  button
+    font-size: 2em
+    transition: background-color 0.5s ease-in
+.delete-sample
+  position: relative
+  margin-left: 1em
+  background: white
+  border: none
+  border-radius: 5px
+  font-size: 1em
+  font-weight: bold
+  z-index: 30
+  cursor: pointer
+#category-selection
+  button
+    margin-right: 0.2em
+    border: none
+    border-radius: 10px
+    cursor: pointer
+
+.fulltrack-container
+  transition: height 0.5s
+  .trackinfo-container
+    min-width: 50%
+    position: relative
+    display: flex
+    flex-direction: row
+    flex-grow: 0
+
+.controls
+  margin-bottom: 1em
+.file-input
+  margin: 0.25em 0 1em 0
+
+[data-sample]
+  transition: background-color 0.5s 
+
+.remove-sample
+  border: none
+  background-color: black
+  border-radius: 8px 8px 0 0
+  color: white
+  z-index: 15
+
+.center
+    margin: auto
+    width: 90%
+    text-align: center
+
+.sticky
+  position: fixed
+  top: 0
+  left: 50%
+  transform: translate(-50%, 0)
+  background-color: white
+  z-index: 19
+  
+#sample-selector
+  width: 100%
+  margin: auto
+  justify-content: center
+  overflow: hidden
+.single-radio-button
+  width: 100%
+  .radio-button-label
+    display: block
+    overflow: hidden
+    min-height: 99%
+    min-width: 99%
+    position: absolute
+    top: 0
+    left: 0
+    margin: 0
+    z-index: 10
+    cursor: pointer
+    transition: border-radius 0.1s ease-in
+    border: 1px dotted black
+    &:hover
+      border: 1px solid black
+      border-radius: 10px
+
+.button-active
+  background: red
+  color: white
+.button-active-green
+  background: green
+  color: white
+  
+.disabled
+  color: lightgray !important
+
+.minimized
+  display: none
+
+@media (max-width: 1000px)
+  .minimize
+    padding: 0
+@media (max-width: 900px)
+  .control-panel
+    width: 60%
+  span.separator 
+    border-top: 1px solid #333
+    width: 100%
+    margin: auto
+    height: 1px
+    display: block
+  .track-info
+    width: 20%
+
+@media (max-width: 875px)
+  #category-selection
+    button
+      font-size: 1.5em
+@media (max-width: 600px)
+  #sample-selector
+    width: 100%
+  .center
+    width: 95%
+  #category-selection
+    button
+      border-radius: 5px
+      font-size: 1em
+@media (max-width: 400px)
+  .track-info
+    input
+      width: 100%

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Maker</title>
+    <script src="src/music-maker.js" defer></script>
+    <link href="src/styles.css" rel="stylesheet"/>
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;1,700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+    <div class="center">
+      <div id="sample-selector">
+      <h1 id="page-title">Music Maker vol. 2</h1>
+    <span class="separator"></span>
+      <div id="category-selection">
+      </div>
+      <span class="separator"></span>
+      <div class="sample-menu" id="sample-menu">
+      </div>
+    </div>
+        <div id="quick-guide">
+          <p>
+            Start creating music by clicking here!
+          </p>
+        </div>
+        <div class="control-panel" id="toolkit">
+          <div>
+          <div class="control-panel-header" draggable="true">
+            <h2>Music Maker</h2>
+            <button id="minimize-button">Minimize</button>
+          </div>
+          <div class="control-panel-content">
+            <div class="sample-controls">
+              <div class="file-input">
+                <!--Hide default file input text + button, replace with a custom button-->
+              <input type="file" style="display:none;" id="input-sample" name="input-sample" accept="audio/*">
+              <input type="button" value="Valitse tiedosto" onclick="document.getElementById('input-sample').click();" />
+              <input style="text-align: center" type="text" id="input-sample-name" placeholder="Sample name" name="sample-name">
+              <button id="upload">Add new sample</button>
+              <div class="record-container">
+                <button id="record-button">Record new sample</button>
+                </div>
+              </div>
+              <div class="controls" id="control-buttons">
+                <button id="play">
+                  <span>Play</span>
+                </button>
+                <button id="pause">
+                  <span>Pause</span>
+                </button>
+                <button id="stop">
+                  <span>Stop</span>
+                </button>
+              </div>
+            </div>
+              <div class="track-options">
+                <button id="add-track">Add Track</button>
+                <button id="remove-track">Remove Track</button>
+                <button id="clear-selection">Clear Selection</button>
+              </div>
+          </div>
+          </div>  
+        </div>
+        <div id="scroll-placeholder"></div>
+        <div class="track-container" id="tracks">
+            
+        </div>
+      </div>
+  </body>
+  
+</html>
