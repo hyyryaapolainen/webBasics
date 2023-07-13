@@ -5,12 +5,12 @@
 //Too long sample names (Lorem ipsum paragraphs etc. make the samplecontainer expand and break, quick fix to solve this issue)
 const maxSampleName = 20
 const defaultSampleName = "Custom sample"
-const stepBetweenSamples = 150
-var sampleWidthMultiplier = 10
+const stepBetweenSamples = 250
+var sampleWidthMultiplier = 50
 
 var samples = [
     {id: 0, category: "Bass", src: "audio/bass.mp3", name: "Bass_Sample", duration: 7.49 },
-    {id: 1, category: "Drum", src: "audio/drum.mp3", name: "Drum", duration: 1 },
+    {id: 1, category: "Drum", src: "audio/drum.mp3", name: "Drum", duration: 0.966 },
     {id: 2, category: "Piano", src: "audio/piano.mp3", name: "Piano", duration: 34 },
     {id: 3, category: "Silence", src: "audio/silence.mp3", name: "Silence", duration: 2 },
     {id: 4, category: "Beat", src: "audio/strange-beat.mp3", name: "Strange Beat", duration: 7 },
@@ -236,7 +236,6 @@ async function getClipDuration(src) {
     const response = await fetch(src);
     const buffer = await response.arrayBuffer();
     const audioBuffer = await audioContext.decodeAudioData(buffer);
-
     return audioBuffer.duration;
 }
 
@@ -352,9 +351,10 @@ function updateSampleByCategory(sampleId, newCategory)
 function createSampleContainer(sample,trackKey) {
     const sampleContainer = document.createElement('div');
     sampleContainer.classList.add('sample-container');
-    var sampleID = addToTrack(sample, trackKey)
+    sampleContainer.setAttribute("data-nowplaying", false)
+    addToTrack(sample, trackKey)
     sampleContainer.style.width = (sample.duration * sampleWidthMultiplier)+"px"
-    sampleContainer.style.marginRight = (stepBetweenSamples / 100) * sampleWidthMultiplier+'px'
+    sampleContainer.style.marginRight = (stepBetweenSamples / 1000) * sampleWidthMultiplier+'px'
 
     const removeSample = document.createElement('button')
     removeSample.classList.add("remove-sample")
@@ -366,7 +366,7 @@ function createSampleContainer(sample,trackKey) {
     removeSample.onclick = function(event){
         //Styling, makes a smooth transition when removing a sample
         removeSampleWithAnimation(event)
-        removeFromTrack(sampleID, trackKey)
+        removeFromTrack(sample, trackKey)
     }
     sampleContainer.appendChild(removeSample);
 
@@ -391,6 +391,7 @@ function removeSampleWithAnimation(event)
     const button = sampleContainer.querySelector("button")
     button.style.display = "none"
     sampleContainer.style.border = "none"
+    sampleContainer.dataset.nowplaying ="false"
     setTimeout(() => {
         //Refactor this into CSS class selector
         sampleContainer.style.width = "0"
@@ -405,13 +406,15 @@ function removeSampleWithAnimation(event)
 //Add sample to track (Backend)
 function addToTrack(sample, trackKey)
 {
+    sample.trackId = tracks[trackKey].samples.length
     tracks[trackKey].samples.push(sample)
-    return tracks[trackKey].samples.length -1
 }
 //Removes sample from track (Backend)
-function removeFromTrack(sampleID, trackKey)
-{
-    tracks[trackKey].samples.splice(sampleID, 1)
+function removeFromTrack(sample, trackKey)
+{   
+    var track = tracks[trackKey]
+    var sampleIndex = track.samples.findIndex(sample => sample.trackId)
+    track.samples.splice(sampleIndex, 1);
 }
 //Creates a drag and drop area for a container
 //Depreciated in functionality as only 1 drag and drop container is needed now
@@ -652,8 +655,8 @@ function removeSelectedTrack()
         updateRemoveButton()
         var key = 'Track'+trackIndex
         tracks[key].source.disconnect()
+        tracks[key].audio.pause()
         delete tracks[key]
-        
       }
     }
 }
@@ -810,17 +813,25 @@ function playSong() {
 }
 //Plays every sample on a track
 function playTrack(track) {
-    if(track.playing)
-    {
-        return
-    }
+    track.playing = true
     var samples = track.samples
+    track.audio = new Audio()
     var audio = track.audio
     var trackSource = track.source
     trackSource.connect(track.volume).connect(audioContext.destination)
     let i = 0
     audio.src = samples[0].src
+    var trackSamples = document.getElementById("Track"+track.id)
+    var sampleContainers = trackSamples.querySelectorAll(".sample-container")
     audio.addEventListener("ended", () => {
+            sampleContainers = trackSamples.querySelectorAll(".sample-container")
+            if(i>0)
+            {
+                sampleContainers[i-1].dataset.nowplaying = false;
+            }
+            else{
+                sampleContainers[i].dataset.nowplaying = false;
+            }
             if(i === samples.length)
             {
                 i = track.looping ? 0 : i
@@ -828,18 +839,26 @@ function playTrack(track) {
             if(i < samples.length)
             {
                 audio.src = samples[i].src
+                audio.load()
                 //use this for steps between samples
                 setTimeout(() => {
+                    sampleContainers[i].dataset.nowplaying = true
                     audio.play()
                     i++
                 }, stepBetweenSamples)
             }
-            else{
+            else
+            {
+                sampleContainers.forEach((container) => {
+                    container.dataset.nowplaying = false;
+                })
                 track.playing = false;
+                trackSource.disconnect()
+                track
             }        
         })
     audio.play()
-    track.playing = true
+    sampleContainers[i].dataset.nowplaying = true;
     i++
 }
 
@@ -910,7 +929,6 @@ function setUpDocument()
         //Limit sample name to maxSampleName
         if(sampleNameInput.value.length > maxSampleName)
         {   
-            console.log(prevSampleName)
             sampleNameInput.value = prevSampleName
         }
         else
@@ -927,9 +945,8 @@ function setUpDocument()
     playButton.addEventListener("click", function(){
         if (audioContext.state === "suspended") {
             audioContext.resume();
-            Object.values(tracks).forEach((track) => track.audio.play())
         }
-        else
+        else if(!currentlyPlaying())
         { 
             playSong()
         }
@@ -937,10 +954,10 @@ function setUpDocument()
     const pauseButton = document.getElementById("pause")
     pauseButton.addEventListener("click", function(){
         if (audioContext.state === "running") {
-            Object.values(tracks).forEach((track) => track.audio.pause())
             audioContext.suspend();
         }
     })
+    /*
     const stopButton = document.getElementById("stop")
     stopButton.addEventListener("click", function(){
         if(audioContext.state === "running")
@@ -948,6 +965,7 @@ function setUpDocument()
             audioContext.close()
         }
     })
+    */
     const quickGuide = document.getElementById("quick-guide")
     //Move this to CSS
     quickGuide.style.cursor = 'pointer'
@@ -968,9 +986,6 @@ function setUpDocument()
     setUpTopbarScroll()
     setUpToolKit()
     disableButtons()
-
-    //DEV
-    quickGuide.click()
 }
 var recording = false;
 function setUpRecorder()
