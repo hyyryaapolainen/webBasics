@@ -30,12 +30,12 @@ I worked entirely on a fullscreen application before moving onto mobile views, w
 |--|--|--|--|
 | Well-written report | 2 | YES | The application includes a well-written report providing clear documentation and explanation of its features |
 | No report | -30 | NO | If no report is provided, a penalty of -30 points will be applied|
-|Application is responsive and can be used on both desktop and mobile environment | 4 | |The application is designed to be responsive, allowing it to function well on both desktop and mobile devices |
+|Application is responsive and can be used on both desktop and mobile environment | 4 | PARTIALLY |The application is designed to be responsive, allowing it to function well on both desktop and mobile devices |
 | Application is not responsive | -2 | NO | If the application is not responsive, a penalty of -2 points will be applied |
-| Application works on Firefox, Safari, Edge, and Chrome | 2 | | The application is tested and verified to work on Firefox, Safari, Edge, and Chrome browsers |
+| Application works on Firefox, Safari, Edge, and Chrome | 2 | YES | The application is tested and verified to work on Firefox, Safari, Edge, and Chrome browsers |
 | Application does not work | -30 | WORKS | If the application is not functioning, a penalty of -30 points will be applied |
-| CSS, JavaScript, and HTML are all in the same file | -5 | SEPARATED | If CSS, JavaScript, and HTML are combined in a single file, a penalty of -5 points will be applied |
-| Inappropriate content, including hate speech-related memes and other trash | -100 | NOPE | If the application contains inappropriate content, including hate speech-related memes or other offensive material, a penalty of -100 points will be applied |
+| CSS, JavaScript, and HTML are all in the same file | -5 | NO | If CSS, JavaScript, and HTML are combined in a single file, a penalty of -5 points will be applied |
+| Inappropriate content, including hate speech-related memes and other trash | -100 | NO | If the application contains inappropriate content, including hate speech-related memes or other offensive material, a penalty of -100 points will be applied |
 
 ### Features specified in instructions
 
@@ -52,7 +52,7 @@ I worked entirely on a fullscreen application before moving onto mobile views, w
 | User can delete tracks and instrument items | 3 | YES | Users have the ability to remove tracks and individual instrument items from the composition if needed |
 | Adjustable volume per instrument item | 1 | NO | Each instrument item within a track can have its own adjustable volume level |
 | One can change the category of an instrument | 1 | YES | Users can change the category of an instrument, allowing it to be moved to a different category or group |
-| Able to download the final song | 3 | | Users have the option to download the final composition as a song file, allowing them to save and share it |
+| Able to download the final song | 3 | NO | Users have the option to download the final composition as a song file, allowing them to save and share it |
 
 ### Added features
 
