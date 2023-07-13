@@ -5,11 +5,15 @@ body {
 }
 
 .sample-menu {
+  margin: 1em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   overflow-y: auto;
+}
+.sample-menu :not(:first-child) {
+  margin-left: 0.25em;
 }
 .sample-menu .draggable-button {
   word-wrap: break-word;
@@ -20,12 +24,7 @@ body {
   padding: 0.5em;
   border-radius: 10px;
   cursor: pointer;
-  margin-left: 0.25em;
   margin-top: 0.25em;
-}
-
-.sample-menu {
-  margin: 1em;
 }
 
 .track-name-label {
@@ -82,7 +81,7 @@ input[type=checkbox] {
 }
 
 .single-track {
-  height: 8em;
+  min-height: 100%;
   margin: 1em 1em 0 0;
   flex-wrap: nowrap;
   min-width: 80%;
@@ -94,7 +93,7 @@ input[type=checkbox] {
 
 .track-info {
   position: relative;
-  height: 6em;
+  height: 100%;
   margin: 1em 1em 0 0;
   padding: 1em;
   width: 10%;
@@ -111,7 +110,6 @@ input[type=checkbox] {
 }
 
 .track-samples {
-  height: 100%;
   width: -moz-fit-content;
   width: fit-content;
   position: relative;
@@ -148,6 +146,8 @@ input[type=checkbox] {
 }
 
 .control-panel {
+  min-width: -moz-fit-content;
+  min-width: fit-content;
   z-index: 20;
   display: flex;
   width: 40%;
@@ -164,13 +164,12 @@ input[type=checkbox] {
   width: 100%;
 }
 .control-panel div .control-panel-header {
-  position: relative;
   flex-direction: row;
   display: flex;
   width: 100%;
   cursor: pointer;
   z-index: 21;
-  align-items: center;
+  align-items: top;
 }
 .control-panel div .control-panel-header h2 {
   margin: 0;
@@ -178,12 +177,6 @@ input[type=checkbox] {
   border: 1px solid black;
   background-color: white;
   width: 100%;
-}
-.control-panel div .control-panel-header button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
 }
 
 span.separator {
@@ -197,7 +190,10 @@ span.separator {
 .minimize {
   font-size: 1em;
   text-align: left;
-  padding-left: 2em;
+}
+
+.track-options {
+  margin-bottom: 1em;
 }
 
 #category-selection {
@@ -238,6 +234,14 @@ span.separator {
   flex-grow: 0;
 }
 
+.controls {
+  margin-bottom: 1em;
+}
+
+.file-input {
+  margin: 0.25em 0 1em 0;
+}
+
 [data-sample] {
   transition: background-color 0.5s;
 }
@@ -247,6 +251,7 @@ span.separator {
   background-color: black;
   border-radius: 8px 8px 0 0;
   color: white;
+  z-index: 15;
 }
 
 .center {
@@ -311,14 +316,14 @@ span.separator {
   display: none;
 }
 
+@media (max-width: 1000px) {
+  .minimize {
+    padding: 0;
+  }
+}
 @media (max-width: 900px) {
   .control-panel {
-    width: 100%;
-    flex-direction: column;
-  }
-  .control-panel .file-input, .control-panel .controls {
     width: 60%;
-    margin-bottom: 1em;
   }
   span.separator {
     border-top: 1px solid #333;
@@ -336,12 +341,20 @@ span.separator {
     font-size: 1.5em;
   }
 }
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+  #sample-selector {
+    width: 100%;
+  }
   .center {
     width: 95%;
   }
   #category-selection button {
     border-radius: 5px;
     font-size: 1em;
+  }
+}
+@media (max-width: 400px) {
+  .track-info input {
+    width: 100%;
   }
 }/*# sourceMappingURL=styles.css.map */

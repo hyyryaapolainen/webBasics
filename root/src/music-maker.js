@@ -2,11 +2,11 @@
 //Could Probably be Refactored for better navigation or sorting by category in all samples view
 
 //Probably bad to do this instead of truncation or word wrap
-//Too long sample names (Lorem ipsum paragraphs etc. make the samplecontainer expand and break)
+//Too long sample names (Lorem ipsum paragraphs etc. make the samplecontainer expand and break, quick fix to solve this issue)
 const maxSampleName = 20
 const defaultSampleName = "Custom sample"
 const stepBetweenSamples = 150
-const sampleWidthMultiplier = 10
+var sampleWidthMultiplier = 10
 
 var samples = [
     {id: 0, category: "Bass", src: "audio/bass.mp3", name: "Bass_Sample", duration: 7.49 },
@@ -201,6 +201,7 @@ function addDraggableSampleButton(sample)
     removeButton.classList.add("delete-sample")
     removeButton.innerHTML = "X"
     removeButton.addEventListener("click", function(event){
+        event.stopPropagation()
         removeSampleFromApp(event.target.parentElement.dataset.sample)
         generateSampleMenu(findSamplesByCategory(currentCategory))
     })
@@ -218,17 +219,15 @@ function removeSampleFromApp(sampleId)
         if(samples[i].id == sampleId)
         {
             samples.splice(i, 1)
-            return;
-        }
-        else{
-            //This should not happen
-            console.log("sample not found in backend")
+            break;
         }
     }
     //Remove elements corresponding with sampleId
-    const allSampleElements = document.querySelectorAll(`[data-sample="${sampleId}"`)
+    //Use click functionality to generate animation for all removed elements
+    //Refactor data-sampleremove to something nicer
+    const allSampleElements = document.querySelectorAll(`[data-sampleremove="${sampleId}"`)
     allSampleElements.forEach((sample) => {
-        sample.remove()
+        sample.click()
     })
 }
 
@@ -245,7 +244,7 @@ async function uploadFile()
 {
     //Handles upload event when a correct file and a voluntary name input is given
     const file = document.getElementById("input-sample").files[0]
-    //default to sample name
+    //default to Custom sample 
 
     const name = document.getElementById("input-sample-name").value ?  document.getElementById("input-sample-name").value  : file.name
     if(name.length > maxSampleName)
@@ -278,12 +277,17 @@ function generateSampleMenu(samples)
 {
     //Generates a sample button for each of the samples given
     var container = document.getElementById("sample-menu")
+    //Get container height to fill emptydiv if empty
+    var height = container.offsetHeight;
     container.innerHTML =""
     if(samples.length <= 0)
     {
         //If no samples are given, creates a small text notification to indicate that there are none
         var emptyDiv = document.createElement("div")
         emptyDiv.innerText = "No samples in the current category!"
+        emptyDiv.style.fontSize = "20px"
+        emptyDiv.style.padding= "0.5em"
+        emptyDiv.style.marginTop = "0.25em"
         emptyDiv.style.textAlign = 'center'
         emptyDiv.style.margin = "auto"
         container.appendChild(emptyDiv)
@@ -355,31 +359,13 @@ function createSampleContainer(sample,trackKey) {
     const removeSample = document.createElement('button')
     removeSample.classList.add("remove-sample")
     removeSample.innerText ="X"
-    removeSample.style.zIndex = 8
+    removeSample.setAttribute("data-sampleremove", sample.id)
     removeSample.style.cursor ="pointer"
-    removeSample.setAttribute("data-sample", sample.id)
     removeSample.style.backgroundColor = colorsByCategory[sample.category].background
     
     removeSample.onclick = function(event){
-        const sampleContainer = event.target.parentElement
-
         //Styling, makes a smooth transition when removing a sample
-        sampleContainer.style.display = "block"
-        sampleContainer.style.width = sampleContainer.offsetWidth+"px"
-        const text = sampleContainer.querySelector("p")
-        text.style.display = "none"
-        const button = sampleContainer.querySelector("button")
-        button.style.display = "none"
-        sampleContainer.style.border = "none"
-        setTimeout(() => {
-            //Refactor this into CSS class selector
-            sampleContainer.style.width = "0"
-            sampleContainer.style.minWidth = "0"
-            sampleContainer.style.margin = "0"
-          }, 10);
-        setTimeout(() => {
-            sampleContainer.remove()
-          }, 510);
+        removeSampleWithAnimation(event)
         removeFromTrack(sampleID, trackKey)
     }
     sampleContainer.appendChild(removeSample);
@@ -393,6 +379,27 @@ function createSampleContainer(sample,trackKey) {
     sampleContainer.appendChild(sampleText);
 
     return sampleContainer;
+
+}
+function removeSampleWithAnimation(event)
+{
+    const sampleContainer = event.target.parentElement
+    sampleContainer.style.display = "block"
+    sampleContainer.style.width = sampleContainer.offsetWidth+"px"
+    const text = sampleContainer.querySelector("p")
+    text.style.display = "none"
+    const button = sampleContainer.querySelector("button")
+    button.style.display = "none"
+    sampleContainer.style.border = "none"
+    setTimeout(() => {
+        //Refactor this into CSS class selector
+        sampleContainer.style.width = "0"
+        sampleContainer.style.minWidth = "0"
+        sampleContainer.style.margin = "0"
+      }, 10);
+    setTimeout(() => {
+        sampleContainer.remove()
+      }, 510);
 
 }
 //Add sample to track (Backend)
@@ -577,6 +584,8 @@ function createNewTrack()
 }   
 //Sets scroll listener for top bar options
 //Set up scroll support for toolbar sticking
+var lastScrollY = 0;
+var lastScrollX = 0;
 
 function setUpTopbarScroll()
 {
@@ -585,10 +594,11 @@ function setUpTopbarScroll()
     var toolkit = document.getElementById("toolkit")
     var placeHolder = document.getElementById("scroll-placeholder")
     window.addEventListener("scroll", () =>{
-        navbar.classList.add("sticky")
+
         var stickyY = navbar.offsetTop;
         var stickyX = 10;
         if (window.scrollY > stickyY || window.scrollX > stickyX) {
+            navbar.classList.add("sticky")
             placeHolder.style.height = navbar.offsetHeight+"px"
             placeHolder.style.width = navbar.offsetWidth+"px"
             placeHolder.style.display ='block'
@@ -598,8 +608,17 @@ function setUpTopbarScroll()
         }
     })
     //Add functionality for toolbar moving with scrolled window
-    window.addEventListener("scroll", () =>{
-        
+    window.addEventListener("scroll", (event) =>{
+        var x = 0
+        var y = 0
+        offsetX = toolkit.offsetLeft;
+        offsetY = toolkit.offsetTop;
+        x = scrollX - lastScrollX
+        y = scrollY - lastScrollY 
+        lastScrollX = scrollX
+        lastScrollY = scrollY
+        toolkit.style.top = `${offsetY+y}px`;
+        toolkit.style.left = `${offsetX+x}px`;
     })
 
 }
@@ -857,6 +876,7 @@ function disableButtons()
         input.classList.add("disabled")
     })
 }
+var prevSampleName = ""
 //Updates namefield with the name of the file (- .mp3)
 function fileSelected()
 {
@@ -885,11 +905,24 @@ function setUpDocument()
     uploadButton.addEventListener("click", async function(){
         await uploadFile();
     })
-
+    const sampleNameInput = document.getElementById("input-sample-name")
+    sampleNameInput.addEventListener("input", function(){
+        //Limit sample name to maxSampleName
+        if(sampleNameInput.value.length > maxSampleName)
+        {   
+            console.log(prevSampleName)
+            sampleNameInput.value = prevSampleName
+        }
+        else
+        {
+            prevSampleName = sampleNameInput.value
+        }
+    })
     const sampleInput = document.getElementById("input-sample")
     sampleInput.addEventListener("change", function(){
         fileSelected()
     })
+    
     const playButton = document.getElementById("play")
     playButton.addEventListener("click", function(){
         if (audioContext.state === "suspended") {
@@ -926,6 +959,11 @@ function setUpDocument()
         category.click()
         quickGuide.remove()
     })
+    const controlPanel = document.getElementById("toolkit");
+    window.addEventListener("resize", function(){
+        controlPanel.style.left = "30%"
+        controlPanel.style.top = "50%"
+    })
     setUpRecorder()
     setUpTopbarScroll()
     setUpToolKit()
@@ -940,6 +978,7 @@ function setUpRecorder()
     const recordButton = document.getElementById("record-button")
     const soundClip = document.getElementById("sound-clip")
     if (navigator.mediaDevices) {
+        const buttons = document.getElementById("control-buttons").querySelectorAll("button")
         navigator.mediaDevices.getUserMedia({"audio": true}).then((stream) => {
           const mediaRecorder = new MediaRecorder(stream);
           let chunks = [];
@@ -949,38 +988,45 @@ function setUpRecorder()
           mediaRecorder.addEventListener("stop", async function(event){
             const blob = new Blob(chunks, {"type": "audio/ogg; codecs=opus"});
             const audioSrc = window.URL.createObjectURL(blob);
-            var sampleName = prompt("Enter sample name here:")
+            chunks = [];
+            var sampleName = document.getElementById("input-sample-name").value
+            buttons.forEach((button) => {
+                button.disabled = false
+            })
             if(sampleName === null || sampleName === "")
             {
               sampleName = defaultSampleName
             }
-            let clipDuration = await getClipDuration(audioSrc)
+            let clipDuration = await getClipDuration(
+                audioSrc)
+                
     
-            let sample = {id: samples.length, category: currentCategory, src: audioSrc, name: sampleName, duration: clipDuration }
-        
+            let sample = {id: samples.length, category: currentCategory, src: audioSrc, name: sampleName, duration: clipDuration}
             samples.push(sample)
             generateSampleMenu(findSamplesByCategory(currentCategory))
-            chunks = [];
           });
           recordButton.addEventListener("click", () => {
             if (recording) {
               mediaRecorder.stop();
               recording = false;
-              recordButton.innerHTML = "Record"
+              recordButton.innerHTML = "Record new sample"
             } else {
               mediaRecorder.start();
               recording = true;
               recordButton.innerHTML = "Stop"
+              buttons.forEach((button) => {
+                button.disabled = true
+              })
             }
           });
       
         }).catch((err) => {
-          // Throw alert when the browser is unable to access the microphone.
-          alert("Oh no! Your browser cannot access your computer's microphone.");
+          //browser is unable to access the microphone.
+          alert("Your browser cannot access your computer's microphone.");
         });
       } else {
-        // Throw alert when the browser cannot access any media devices.
-        alert("Oh no! Your browser cannot access your computer's microphone. Please update your browser.");
+        //browser cannot access any media devices.
+        alert("Your browser cannot access your computer's microphone. Please update your browser.");
       }
 }
 //Check when page is loaded and set up (From lecture materials)
