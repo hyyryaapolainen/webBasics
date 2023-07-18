@@ -60,9 +60,7 @@ I worked entirely on a fullscreen application before moving onto mobile views, w
 | Feature | Points | Comments and justifications |
 |--|--|--|
 | Drag 'n' drop toolbox for ease of use | 2 | Implement CSS and JavaScript to create a drag and drop toolbox window that stays within the screen boundaries with scroll functionality |
-| Track selections for play and pause functionality | 2  | Enable users to select individual tracks for play and pause functionality via the toolbox |
-| Infinite track visualization | 1  | Implement visualization of tracks that can be continued infinitely to the right |
-| Category expansion and custom categories | 1  | Implement adding custom categories |
+| Infinite track visualization | 2 | Implement visualization of tracks that can be continued infinitely to the right and down |
 | CSS Styling | 3  | Implement custom CSS styling for samples, Dnd, functionality, category selection and responsiveness. Visualize playback and current playing samples |
 
 ## User guide
