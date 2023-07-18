@@ -67,4 +67,15 @@ I worked entirely on a fullscreen application before moving onto mobile views, w
 
 ## User guide
 
-Press quick start to open up the first category (Bass) and 
+Click on the quick guide to open up the first category (Bass) and add the initial track. You can then add samples to the track by either clicking the sample button while a track is selected or by dragging and dropping the sample to a track.
+Samples will be added one after the other and can be removed from the track by clicking the X on the sample residing on the track. By deleting a sample from the category, it is deleted from the entire site and has to be reuploaded or recorded.
+
+Pressing play while any of the tracks has samples will start playing the samples in order from all of the tracks, visualized with a green color to show which sample is playing. On the left hand side, you can control each track's volume and looping by playing with the options. If any of the tracks are playing, deleting samples is impossible so it is advised to press Stop before editing tracks. Adding samples to a track that is playing is possible. 
+
+To move a sample from a category to another, simply drag and drop the sample to the category desired. It will then be color coded according to it's new category, in trackview and in sample menu.
+
+To add new samples, you can either click the choose a file button to upload a file or record an entirely new sample. Recording is possible only if the playback is stopped. Samples will use the namefield by default so you need to enter a sample name BEFORE recording to save it with the desired name. The maximum length for a sample name is 20 characters.
+
+To add new tracks, simply press add track to create a new track. New tracks are selected by default but you can either reselect the previous one by clicking on the options box on the left side or clear the selection entirely by pressing Clear Selection.
+
+Minimizing the toolkit will reduce it to only show Play, Pause and Stop buttons. You can drag and drop the toolkit around to best fit it in your setup
