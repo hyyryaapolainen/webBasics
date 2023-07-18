@@ -22,5 +22,10 @@
 ####  Luento 7
 - [X] 7-1
 
+#### Harkkatyö (Dokumentaatio => src/README.md)
+- []
+  
+#### Tentti
+- []
 
 
